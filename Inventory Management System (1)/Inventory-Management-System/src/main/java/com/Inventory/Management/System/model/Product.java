@@ -22,8 +22,12 @@ public class Product {
     @JsonIgnore
     @OneToMany(mappedBy = "product")
     private Set<Stock> stocks;
+    public Product() {}
+    public Product(String productId2) {
+		this.productId=productId2;
+	}
 
-    public String getProductId() {
+	public String getProductId() {
         return productId;
     }
 

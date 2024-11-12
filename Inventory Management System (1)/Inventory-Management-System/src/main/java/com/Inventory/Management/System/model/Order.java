@@ -1,6 +1,8 @@
 package com.Inventory.Management.System.model;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 import java.util.List;
 
@@ -17,7 +19,7 @@ public class Order {
     private String mobileNo;
     private String address;
     private String zipcode;
-
+    @JsonManagedReference
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems;
 

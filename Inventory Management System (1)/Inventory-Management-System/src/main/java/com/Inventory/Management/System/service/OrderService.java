@@ -5,6 +5,9 @@ import com.Inventory.Management.System.model.Order;
 import com.Inventory.Management.System.model.OrderItem;
 import com.Inventory.Management.System.repository.OrderRepository;
 import com.Inventory.Management.System.repository.OrderItemRepository;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,4 +50,8 @@ public class OrderService {
             throw new RuntimeException("Error saving the order", e);
         }
     }
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll();
+    }
+
 }

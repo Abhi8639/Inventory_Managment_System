@@ -41,4 +41,23 @@ public class StockController {
         }
         return ResponseEntity.badRequest().build();
     }
+    @PostMapping("/addOrUpdate")
+    public ResponseEntity<Stock> addOrUpdateStock(@RequestBody Map<String, Object> requestData) {
+        String productId = (String) requestData.get("productId");
+        String warehouseId = (String) requestData.get("warehouseId");
+        Integer quantity;
+
+        try {
+            quantity = Integer.parseInt(requestData.get("quantity").toString());
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        Stock stock = stockService.addOrUpdateStock(productId, warehouseId, quantity);
+        if (stock != null) {
+            return ResponseEntity.ok(stock);
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
 }

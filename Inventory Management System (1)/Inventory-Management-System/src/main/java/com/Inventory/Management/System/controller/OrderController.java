@@ -3,6 +3,9 @@ package com.Inventory.Management.System.controller;
 import com.Inventory.Management.System.model.*;
 import com.Inventory.Management.System.model.OrderItem;
 import com.Inventory.Management.System.service.OrderService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,4 +30,10 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while creating the order");
         }
     }
+    @GetMapping(produces = "application/json")
+    public ResponseEntity<List<Order>> getAllOrders() {
+        List<Order> orders = orderService.getAllOrders();
+        return ResponseEntity.ok(orders);
+    }
+
 }

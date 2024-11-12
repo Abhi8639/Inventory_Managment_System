@@ -28,7 +28,17 @@ public class Warehouse {
     @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<User> users;  // Assuming that a warehouse can have multiple users
 
-    public String getWarehouseId() {
+    public Warehouse(String warehouseId2) {
+		// TODO Auto-generated constructor stub
+    	this.warehouseId = warehouseId2;
+
+    	
+	}
+    public Warehouse() {
+
+    	
+	}
+	public String getWarehouseId() {
         return warehouseId;
     }
 
