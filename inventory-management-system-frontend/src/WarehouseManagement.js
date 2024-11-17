@@ -7,6 +7,7 @@ function WarehouseManagement() {
   const [newWarehouse, setNewWarehouse] = useState({
     location: '',
     capacity: '',
+    zipcode: '', 
   });
   const [editMode, setEditMode] = useState(false);
   const [editWarehouseId, setEditWarehouseId] = useState(null);
@@ -42,14 +43,13 @@ function WarehouseManagement() {
         await axios.post('/api/warehouses/add', newWarehouse);
       }
       fetchWarehouses();  
-      setNewWarehouse({ location: '', capacity: '' });  
+      setNewWarehouse({ location: '', capacity: '', zipcode: '' }); 
       setEditMode(false);  
       setEditWarehouseId(null); 
     } catch (error) {
       console.error('Error adding/updating warehouse:', error);
     }
   };
-
 
   const handleDeleteWarehouse = async (warehouseId) => {
     try {
@@ -64,6 +64,7 @@ function WarehouseManagement() {
     setNewWarehouse({
       location: warehouse.location,
       capacity: warehouse.capacity,
+      zipcode: warehouse.zipcode, 
     });
     setEditWarehouseId(warehouse.warehouseId);
     setEditMode(true);
@@ -96,6 +97,17 @@ function WarehouseManagement() {
           className="form-control"
         />
       </div>
+      <div className="form-group">
+        <label htmlFor="zipcode">Zipcode</label>
+        <input
+          type="text"
+          name="zipcode"
+          value={newWarehouse.zipcode} 
+          placeholder="Zipcode"
+          onChange={handleInputChange}
+          className="form-control"
+        />
+      </div>
       <button onClick={handleAddOrUpdateWarehouse} className="submit-btn">
         {editMode ? 'Update Warehouse' : 'Add Warehouse'}
       </button>
@@ -106,6 +118,7 @@ function WarehouseManagement() {
           <tr>
             <th>Location</th>
             <th>Capacity</th>
+            <th>Zipcode</th> 
             <th>Actions</th>
           </tr>
         </thead>
@@ -115,6 +128,7 @@ function WarehouseManagement() {
               <tr key={warehouse.warehouse_id}>
                 <td>{warehouse.location}</td>
                 <td>{warehouse.capacity}</td>
+                <td>{warehouse.zipcode}</td> 
                 <td className="actions">
                   <div className="button-container">
                     <button onClick={() => handleEditClick(warehouse)} className="edit-btn">
@@ -129,7 +143,7 @@ function WarehouseManagement() {
             ))
           ) : (
             <tr>
-              <td colSpan="3">No warehouses available</td>
+              <td colSpan="4">No warehouses available</td>
             </tr>
           )}
         </tbody>

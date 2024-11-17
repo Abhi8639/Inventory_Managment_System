@@ -6,6 +6,7 @@
     padding: 20px;
     background-color: #f4f4f9;
     border-radius: 10px;
+
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
     h2 {
@@ -63,11 +64,11 @@
   table th, table td {
     padding: 12px;
     text-align: left;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #cea1a1;
   }
   
   table th {
-    background-color: #f8f8f8;
+    background-color: #64da64;
     color: #333;
   }
   

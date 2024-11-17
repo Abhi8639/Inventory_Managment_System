@@ -1,0 +1,45 @@
+/* Universal rule to apply top padding to all main content areas */
+body {
+    padding-top: 80px; /* Adjust to match navbar height */
+}
+
+/* Specific adjustments for different screen sizes */
+@media (max-width: 768px) {
+    body {
+        padding-top: 70px; /* Adjusted for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding-top: 80px; /* Adjusted for mobile screens */
+    }
+}
+
+/* Ensure each main container starts after the navbar */
+.main-content,
+.login-container,
+.order-page-container,
+.orders-page,
+.warehouse-stock,
+.product-management,
+.register-container,
+.warehouse-management {
+    margin-top: 60px; /* Ensures content starts after navbar */
+}
+
+.navbar-spacer {
+    height: 60px;
+}
+
+@media (max-width: 768px) {
+    .navbar-spacer {
+        height: 70px;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar-spacer {
+        height: 80px;
+    }
+}

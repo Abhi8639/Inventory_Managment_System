@@ -24,7 +24,7 @@ h3 {
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    margin-top: 400px;
+    margin-top: 600px;
   }
   
 
@@ -134,32 +134,3 @@ h3 {
     background-color: #c82333;
 }
 
-.navbar {
-    display: flex;
-    justify-content: flex-end;
-    background-color: #343a40;
-    color: white;
-    padding: 15px 20px;
-    font-size: 18px;
-    position: relative;
-}
-
-.navbar .logo {
-    position: absolute;
-    left: 20px;
-    font-size: 20px;
-    font-weight: bold;
-    color: white;
-}
-
-.navbar a {
-    color: white;
-    text-decoration: none;
-    padding: 15px;
-    margin-left: 20px;
-}
-
-.navbar a:hover {
-    background-color: #007bff;
-    transition: background-color 0.3s;
-}

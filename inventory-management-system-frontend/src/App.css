@@ -37,10 +37,9 @@
   }
 }
 .navbar-spacer {
-  height: 60px; /* Adjust to match the height of the navbar */
+  height: 60px; 
 }
 
-/* Adjust height for smaller screens if needed */
 @media (max-width: 768px) {
   .navbar-spacer {
     height: 70px;

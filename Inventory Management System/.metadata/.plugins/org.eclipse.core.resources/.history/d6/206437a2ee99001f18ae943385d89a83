@@ -1,5 +1,0 @@
-package com.Inventory.Management.System.repository;
-
-public interface UserRepository {
-
-}

@@ -10,7 +10,8 @@ function OrderPage() {
     zipcode: '',
   });
 
-  const [orderItems, setOrderItems] = useState([{ productId: '', productName: '', price: 0, quantity: 1 }]);
+  const [zipSuggestions, setZipSuggestions] = useState([]);
+  const [orderItems, setOrderItems] = useState([{ productId: '', productName: '', price: 0, quantity: 1, error: '' }]);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -18,10 +19,11 @@ function OrderPage() {
   }, []);
 
   const fetchProducts = () => {
-    axios.get('/api/products')
+    axios
+      .get('/api/products')
       .then(response => {
         console.log('Products fetched:', response.data);
-        setProducts(response.data); 
+        setProducts(response.data);
       })
       .catch(error => console.error('Error fetching products:', error));
   };
@@ -29,6 +31,45 @@ function OrderPage() {
   const handleCustomerInfoChange = (e) => {
     const { name, value } = e.target;
     setCustomerInfo({ ...customerInfo, [name]: value });
+
+    if (name === 'zipcode' && value.length >= 3) {
+      fetchZipSuggestions(value);
+    }
+  };
+
+  const fetchZipSuggestions = (input) => {
+    axios
+      .get(`/api/places?input=${input}`)
+      .then(response => {
+        const { predictions, status } = response.data;
+
+        if (status !== 'OK') {
+          console.error('Backend Places API Error:', response.data.error_message || status);
+          return;
+        }
+
+        const suggestions = predictions.map(prediction => ({
+          id: prediction.place_id,
+          text: prediction.description,
+        }));
+        setZipSuggestions(suggestions);
+      })
+      .catch(error => {
+        console.error('Error fetching zip suggestions from backend:', error.response?.data || error.message);
+      });
+  };
+
+  const handleZipSelect = (suggestion) => {
+    const zipcodeMatch = suggestion.text.match(/\b\d{5}(-\d{4})?\b/); 
+
+    if (zipcodeMatch) {
+      const zipcode = zipcodeMatch[0]; 
+      setCustomerInfo({ ...customerInfo, zipcode }); 
+    } else {
+      console.error('No valid zipcode found in the selected suggestion');
+    }
+
+    setZipSuggestions([]); 
   };
 
   const handleOrderItemChange = (index, field, value) => {
@@ -41,7 +82,8 @@ function OrderPage() {
           ...updatedItems[index],
           productId: selectedProduct.productId,
           productName: selectedProduct.name,
-          price: selectedProduct.price, 
+          price: selectedProduct.price,
+          error: '',
         };
       } else {
         updatedItems[index].productId = '';
@@ -49,9 +91,18 @@ function OrderPage() {
         updatedItems[index].price = 0;
       }
     } else if (field === 'quantity') {
+      const selectedProduct = products.find(product => product.productId === updatedItems[index].productId);
+      const quantity = parseInt(value, 10);
+
+      if (selectedProduct && quantity > selectedProduct.overallQuantity) {
+        updatedItems[index].error = `Only ${selectedProduct.overallQuantity} items in stock`;
+      } else {
+        updatedItems[index].error = '';
+      }
+
       updatedItems[index] = {
         ...updatedItems[index],
-        quantity: parseInt(value, 10),
+        quantity: quantity,
       };
     }
 
@@ -59,7 +110,7 @@ function OrderPage() {
   };
 
   const addProductRow = () => {
-    setOrderItems([...orderItems, { productId: '', productName: '', price: 0, quantity: 1 }]);
+    setOrderItems([...orderItems, { productId: '', productName: '', price: 0, quantity: 1, error: '' }]);
   };
 
   const removeProductRow = (index) => {
@@ -73,27 +124,25 @@ function OrderPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
-    const invalidItems = orderItems.filter(item => !item.productId);
+
+    const invalidItems = orderItems.filter(item => !item.productId || item.error);
     if (invalidItems.length > 0) {
-      alert('Please select a valid product for all order items.');
+      alert('Please resolve errors in order items.');
       return;
     }
-  
-    
+
     const orderData = { ...customerInfo, orderItems };
     console.log('Order Data:', orderData);
-  
 
-    axios.post('/api/orders', orderData)
+    axios
+      .post('/api/orders', orderData)
       .then(response => {
         console.log('Order placed successfully:', response.data);
         setCustomerInfo({ email: '', mobileNo: '', address: '', zipcode: '' });
-        setOrderItems([{ productId: '', productName: '', price: 0, quantity: 1 }]);
+        setOrderItems([{ productId: '', productName: '', price: 0, quantity: 1, error: '' }]);
       })
       .catch(error => console.error('Error placing order:', error));
   };
-  
 
   return (
     <div className="order-page-container">
@@ -142,6 +191,19 @@ function OrderPage() {
             required
             className="order-page-input"
           />
+          {zipSuggestions.length > 0 && (
+            <ul className="zip-suggestions">
+              {zipSuggestions.map(suggestion => (
+                <li
+                  key={suggestion.id}
+                  onClick={() => handleZipSelect(suggestion)}
+                  className="zip-suggestion-item"
+                >
+                  {suggestion.text}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         <h2>Order Items</h2>
@@ -154,15 +216,11 @@ function OrderPage() {
               className="order-page-input"
             >
               <option value="">Select Product</option>
-              {products && Array.isArray(products) && products.length > 0 ? (
-                products.map((product) => (
-                  <option key={product.productId} value={product.productId}>
-                    {product.name}
-                  </option>
-                ))
-              ) : (
-                <option disabled>No products available</option>
-              )}
+              {products.map(product => (
+                <option key={product.productId} value={product.productId}>
+                  {product.name}
+                </option>
+              ))}
             </select>
 
             <input
@@ -177,6 +235,12 @@ function OrderPage() {
             <div className="price-display">
               Price: £{calculateTotalPrice(item)}
             </div>
+
+            {item.error && (
+              <div className="error-message">
+                {item.error}
+              </div>
+            )}
 
             {index > 0 && (
               <button
@@ -199,7 +263,9 @@ function OrderPage() {
         </button>
 
         <div>
-          <button type="submit" className="order-page-button">Submit Order</button>
+          <button type="submit" className="order-page-button">
+            Submit Order
+          </button>
         </div>
       </form>
     </div>

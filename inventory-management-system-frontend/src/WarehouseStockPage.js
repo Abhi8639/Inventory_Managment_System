@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './WarehouseStockPage.css';
 
+
 function WarehouseStockPage() {
   const [products, setProducts] = useState([]);
   const [selectedProductId, setSelectedProductId] = useState('');

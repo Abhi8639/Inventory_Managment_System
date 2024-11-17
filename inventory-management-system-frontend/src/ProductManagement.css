@@ -1,4 +1,3 @@
-/* Resetting margins and paddings */
 * {
     margin: 0;
     padding: 0;
@@ -17,17 +16,53 @@ h1, h2 {
     margin-top: 20px;
 }
 
-.product-management {
-    max-width: 900px;
-    margin: 20px auto;
+.navbar {
+    display: flex;
+    justify-content: flex-end;
+    background-color: #343a40;
+    color: white;
+    padding: 15px 20px;
+    font-size: 18px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar .logo {
+    position: absolute;
+    left: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 15px;
+    margin-left: 20px;
+}
+
+.navbar a:hover {
+    background-color: #007bff;
+    transition: background-color 0.3s;
+}
+.navbar-spacer {
+    height: 60px; 
+    width: 100%;
+  }
+  
+
+  .product-management {
+    margin-top: 750px; 
     padding: 30px;
+    max-width: 900px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    margin-top: 800px;
-
-}
-
+  }
 .form-group {
     margin-bottom: 20px;
 }
@@ -98,8 +133,8 @@ h1, h2 {
 }
 
 .product-table td.actions {
-    text-align: right; 
-    white-space: nowrap; 
+    text-align: right;
+    white-space: nowrap;
 }
 
 .button-container {
@@ -126,44 +161,10 @@ h1, h2 {
 }
 
 .product-table .delete-btn {
-    background-color: #dc3545; 
+    background-color: #dc3545;
     color: white;
 }
 
 .product-table .delete-btn:hover {
     background-color: #c82333;
-}
-
-.navbar {
-    display: flex;
-    justify-content: flex-end;
-    background-color: #343a40;
-    color: white;
-    padding: 15px 20px;
-    font-size: 18px;
-    position: fixed; 
-    top: 0;
-    left: 0;
-    width: 100%; 
-    z-index: 1000; 
-}
-
-.navbar .logo {
-    position: absolute;
-    left: 20px;
-    font-size: 20px;
-    font-weight: bold;
-    color: white;
-}
-
-.navbar a {
-    color: white;
-    text-decoration: none;
-    padding: 15px;
-    margin-left: 20px;
-}
-
-.navbar a:hover {
-    background-color: #007bff;
-    transition: background-color 0.3s;
 }

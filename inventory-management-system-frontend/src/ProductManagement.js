@@ -62,126 +62,130 @@ function ProductManagement() {
   };
 
   return (
-    <div className="product-management">
-      <h1>Product Management</h1>
+    <>
+      <div className="navbar-spacer"></div>
+      
+      <div className="product-management">
+        <h1>Product Management</h1>
 
-      <form onSubmit={addProduct}>
-        <h2>Add New Product</h2>
-        <div className="form-group">
-          <label htmlFor="name">Product Name</label>
-          <input 
-            type="text" 
-            name="name" 
-            id="name"
-            value={newProduct.name} 
-            onChange={handleInputChange} 
-            placeholder="Product Name" 
-            required 
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="price">Price</label>
-          <input 
-            type="number" 
-            name="price" 
-            id="price"
-            value={newProduct.price} 
-            onChange={handleInputChange} 
-            placeholder="Price" 
-            required 
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="overallQuantity">Quantity</label>
-          <input 
-            type="number" 
-            name="overallQuantity" 
-            id="overallQuantity"
-            value={newProduct.overallQuantity} 
-            onChange={handleInputChange} 
-            placeholder="Quantity" 
-            required 
-          />
-        </div>
-        <button type="submit" className="submit-btn">Add Product</button>
-      </form>
-
-      {editProduct && (
-        <form onSubmit={updateProductDetails}>
-          <h2>Edit Product</h2>
+        <form onSubmit={addProduct}>
+          <h2>Add New Product</h2>
           <div className="form-group">
-            <label htmlFor="editName">Product Name</label>
+            <label htmlFor="name">Product Name</label>
             <input 
               type="text" 
               name="name" 
-              id="editName"
-              value={editProduct.name} 
-              onChange={handleEditChange} 
+              id="name"
+              value={newProduct.name} 
+              onChange={handleInputChange} 
               placeholder="Product Name" 
               required 
             />
           </div>
           <div className="form-group">
-            <label htmlFor="editPrice">Price</label>
+            <label htmlFor="price">Price</label>
             <input 
               type="number" 
               name="price" 
-              id="editPrice"
-              value={editProduct.price} 
-              onChange={handleEditChange} 
+              id="price"
+              value={newProduct.price} 
+              onChange={handleInputChange} 
               placeholder="Price" 
               required 
             />
           </div>
           <div className="form-group">
-            <label htmlFor="editQuantity">Quantity</label>
+            <label htmlFor="overallQuantity">Quantity</label>
             <input 
               type="number" 
               name="overallQuantity" 
-              id="editQuantity"
-              value={editProduct.overallQuantity} 
-              onChange={handleEditChange} 
+              id="overallQuantity"
+              value={newProduct.overallQuantity} 
+              onChange={handleInputChange} 
               placeholder="Quantity" 
               required 
             />
           </div>
-          <button type="submit" className="submit-btn">Update Product</button>
+          <button type="submit" className="submit-btn">Add Product</button>
         </form>
-      )}
 
-      <h2>Product List</h2>
-      <table className="product-table">
-        <thead>
-          <tr>
-            <th>Product Name</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Array.isArray(products) && products.length > 0 ? (
-            products.map(product => (
-              <tr key={product.productId}>
-                <td>{product.name}</td>
-                <td>£{product.price}</td>
-                <td>{product.overallQuantity}</td>
-                <td>
-                  <div className="button-container">
-                    <button className="edit-btn" onClick={() => selectProductForEditing(product)}>Edit</button>
-                    <button className="delete-btn" onClick={() => deleteProduct(product.productId)}>Delete</button>
-                  </div>
-                </td>
-              </tr>
-            ))
-          ) : (
+        {editProduct && (
+          <form onSubmit={updateProductDetails}>
+            <h2>Edit Product</h2>
+            <div className="form-group">
+              <label htmlFor="editName">Product Name</label>
+              <input 
+                type="text" 
+                name="name" 
+                id="editName"
+                value={editProduct.name} 
+                onChange={handleEditChange} 
+                placeholder="Product Name" 
+                required 
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="editPrice">Price</label>
+              <input 
+                type="number" 
+                name="price" 
+                id="editPrice"
+                value={editProduct.price} 
+                onChange={handleEditChange} 
+                placeholder="Price" 
+                required 
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="editQuantity">Quantity</label>
+              <input 
+                type="number" 
+                name="overallQuantity" 
+                id="editQuantity"
+                value={editProduct.overallQuantity} 
+                onChange={handleEditChange} 
+                placeholder="Quantity" 
+                required 
+              />
+            </div>
+            <button type="submit" className="submit-btn">Update Product</button>
+          </form>
+        )}
+
+        <h2>Product List</h2>
+        <table className="product-table">
+          <thead>
             <tr>
-              <td colSpan="4">No products available</td>
+              <th>Product Name</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Actions</th>
             </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {Array.isArray(products) && products.length > 0 ? (
+              products.map(product => (
+                <tr key={product.productId}>
+                  <td>{product.name}</td>
+                  <td>£{product.price}</td>
+                  <td>{product.overallQuantity}</td>
+                  <td>
+                    <div className="button-container">
+                      <button className="edit-btn" onClick={() => selectProductForEditing(product)}>Edit</button>
+                      <button className="delete-btn" onClick={() => deleteProduct(product.productId)}>Delete</button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="4">No products available</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 }
 

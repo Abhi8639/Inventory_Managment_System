@@ -23,13 +23,20 @@ function Navbar() {
           <>
             {userRole === 'Admin' && (
               <>
+              <Link to="/allorders">All Orders</Link>
                 <Link to="/products">Product Management</Link>
                 <Link to="/warehouses">Warehouse Management</Link>
                 <Link to="/register">Register</Link>
+          
               </>
             )}
             {userRole === 'Manager' && (
+              <>
               <Link to="/warehouse-stock">Warehouse Stock Management</Link>
+              <Link to="/stockorder">Order Stock </Link>
+              <Link to="/stockdeductions">Orders </Link>
+              <Link to="/warehouse-low-stock">Low Stock Products</Link>
+              </>
             )}
             <Link to="/" onClick={handleLogout}>Logout</Link>
           </>
