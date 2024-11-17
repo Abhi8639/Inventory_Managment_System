@@ -33,7 +33,7 @@
 ## Backend Setup (Spring Boot)
 
 1. **Import the Backend Project**:
-   - Open **Eclipse IDE** (or IntelliJ if preferred).
+   - Open **Eclipse IDE**.
    - Import the backend project as a **Maven project**.
    - Ensure the JDK is set up in Eclipse:
      - Go to `Window > Preferences > Java > Installed JREs` and add your JDK path.
