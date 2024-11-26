@@ -2,17 +2,32 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './ProductManagement.css';
 
+
+/**
+ * ProductManagement component allows users to manage a list of products.
+ * Includes functionality to add, edit, and delete products.
+ */
 function ProductManagement() {
+  // State for storing the list of products
   const [products, setProducts] = useState([]);
+  
+  // State for managing the new product form
   const [newProduct, setNewProduct] = useState({ name: '', price: 0, overallQuantity: 0 });
+  
+  // State for managing the product being edited
   const [editProduct, setEditProduct] = useState(null);
 
+  // Fetches products when the component mounts
   useEffect(() => {
     fetchProducts();
   }, []);
 
+  /**
+   * Fetches the list of products from the backend API
+   * and updates the `products` state.
+   */
   const fetchProducts = () => {
-    axios.get('/api/products')
+    axios.get('http://localhost:8080/api/products')
       .then(response => {
         console.log('Products fetched:', response.data);
         const productsData = Array.isArray(response.data) ? response.data : [];
@@ -21,53 +36,73 @@ function ProductManagement() {
       .catch(error => console.error('Error fetching products:', error));
   };
 
+  /**
+   * Handles input changes for the new product form.
+   */
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewProduct({ ...newProduct, [name]: value });
   };
 
+  /**
+   * Handles input changes for the edit product form.
+   */
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setEditProduct({ ...editProduct, [name]: value });
   };
 
+  /**
+   * Adds a new product by sending a POST request to the backend API.
+   */
   const addProduct = (e) => {
     e.preventDefault();
-    axios.post('/api/products/add', newProduct)
+    axios.post('http://localhost:8080/api/products/add', newProduct)
       .then(() => {
-        fetchProducts();
-        setNewProduct({ name: '', price: 0, overallQuantity: 0 });
+        fetchProducts(); // Refreshes the product list
+        setNewProduct({ name: '', price: 0, overallQuantity: 0 }); // Resets the form
       })
       .catch(error => console.error('Error adding product:', error));
   };
 
+  /**
+   * Updates an existing product's details by sending a PUT request to the backend API.
+   */
   const updateProductDetails = (e) => {
     e.preventDefault();
-    axios.put(`/api/products/update/${editProduct.productId}`, editProduct)
+    axios.put(`http://localhost:8080/api/products/update/${editProduct.productId}`, editProduct)
       .then(() => {
-        fetchProducts();
-        setEditProduct(null);
+        fetchProducts(); // Refreshes the product list
+        setEditProduct(null); // Clears the edit form
       })
       .catch(error => console.error('Error updating product:', error));
   };
 
+  /**
+   * Deletes a product by sending a DELETE request to the backend API.
+   */
   const deleteProduct = (productId) => {
-    axios.delete(`/api/products/delete/${productId}`)
-      .then(() => fetchProducts())
+    axios.delete(`http://localhost:8080/api/products/delete/${productId}`)
+      .then(() => fetchProducts()) // Refresh the product list
       .catch(error => console.error('Error deleting product:', error));
   };
 
+  /**
+   * Selects a product for editing by populating the `editProduct` state.
+   */
   const selectProductForEditing = (product) => {
     setEditProduct({ ...product });
   };
 
   return (
     <>
+      {/* Spacer to prevent overlap with the fixed navbar */}
       <div className="navbar-spacer"></div>
       
       <div className="product-management">
         <h1>Product Management</h1>
 
+        {/* Form for adding a new product */}
         <form onSubmit={addProduct}>
           <h2>Add New Product</h2>
           <div className="form-group">
@@ -109,6 +144,7 @@ function ProductManagement() {
           <button type="submit" className="submit-btn">Add Product</button>
         </form>
 
+        {/* Form for editing an existing product */}
         {editProduct && (
           <form onSubmit={updateProductDetails}>
             <h2>Edit Product</h2>
@@ -152,7 +188,8 @@ function ProductManagement() {
           </form>
         )}
 
-        <h2>Product List</h2>
+        {/* Table to display the list of products */}
+        <h1>Products List</h1>
         <table className="product-table">
           <thead>
             <tr>

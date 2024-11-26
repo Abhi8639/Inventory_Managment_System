@@ -1,50 +1,71 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './Register.css'
+import './Register.css';
 
+/**
+ * Register component allows new users to register by providing their details,
+ * selecting a role, and associating themselves with a warehouse.
+ */
 function Register() {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [warehouses, setWarehouses] = useState([]); 
-    const [selectedWarehouse, setSelectedWarehouse] = useState('');  
-    const [role, setRole] = useState('Manager');  
+    // State for user input fields
+    const [name, setName] = useState(''); // User's name
+    const [email, setEmail] = useState(''); // User's email
+    const [password, setPassword] = useState(''); // User's password
 
+    // State for managing warehouses and selected warehouse
+    const [warehouses, setWarehouses] = useState([]); // List of warehouses fetched from the backend
+    const [selectedWarehouse, setSelectedWarehouse] = useState(''); // Warehouse selected by the user
+
+    // State for user role selection
+    const [role, setRole] = useState('Manager'); // Default role is 'Manager'
+
+    /**
+     * Fetches the list of warehouses when the component mounts.
+     * Uses Axios to make an API request and updates the `warehouses` state.
+     */
     useEffect(() => {
         const fetchWarehouses = async () => {
             try {
                 const response = await axios.get('/api/warehouses');
-                setWarehouses(response.data); 
+                setWarehouses(response.data); // Populates warehouses list
             } catch (error) {
-                console.error('Error fetching warehouses:', error);
+                console.error('Error fetching warehouses:', error); // Logs any errors
             }
         };
 
-        fetchWarehouses();
+        fetchWarehouses(); // Calls the function to fetch warehouses
     }, []);
 
+    /**
+     * Handles the form submission for registering a user.
+     * Sends a POST request to the backend with user details.
+     */
     const handleRegister = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // Prevents default form submission behavior
         try {
-            const response = await axios.post('/api/auth/register', 
-                { name, email, password, warehouseId: selectedWarehouse, role },  
+            const response = await axios.post(
+                '/api/auth/register',
+                { name, email, password, warehouseId: selectedWarehouse, role }, // User data payload
                 { 
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json' // Ensures proper content type
                     },
-                    withCredentials: true
-                });
-            alert('Registration successful');
+                    withCredentials: true // Sends cookies if required
+                }
+            );
+            alert('Registration successful'); // Notifies the user of success
         } catch (error) {
-            console.error('Registration failed', error);
-            alert('Registration failed');
+            console.error('Registration failed', error); // Logs the error
+            alert('Registration failed'); // Notifies the user of failure
         }
     };
 
     return (
+        // Registration form
         <form onSubmit={handleRegister} className="register-container">
             <h1>Register</h1>
             
+            {/* Name input field */}
             <div className="form-group">
                 <label htmlFor="name">Name</label>
                 <input 
@@ -56,6 +77,7 @@ function Register() {
                 />
             </div>
             
+            {/* Email input field */}
             <div className="form-group">
                 <label htmlFor="email">Email</label>
                 <input 
@@ -67,6 +89,7 @@ function Register() {
                 />
             </div>
             
+            {/* Password input field */}
             <div className="form-group">
                 <label htmlFor="password">Password</label>
                 <input 
@@ -78,6 +101,7 @@ function Register() {
                 />
             </div>
 
+            {/* Role selection dropdown */}
             <div className="form-group">
                 <label htmlFor="role">Select Role</label>
                 <select 
@@ -90,6 +114,7 @@ function Register() {
                 </select>
             </div>
             
+            {/* Warehouse selection dropdown */}
             <div className="form-group">
                 <label htmlFor="warehouse">Select Warehouse</label>
                 <select 
@@ -98,6 +123,7 @@ function Register() {
                     required
                 >
                     <option value="">Select Warehouse</option>
+                    {/* Map over warehouses and create an option for each */}
                     {warehouses.map((warehouse) => (
                         <option key={warehouse.warehouseId} value={warehouse.warehouseId}>
                             {warehouse.location}
@@ -106,6 +132,7 @@ function Register() {
                 </select>
             </div>
             
+            {/* Submit button */}
             <button type="submit" className="submit-btn">Register</button>
         </form>
     );

@@ -1,0 +1,106 @@
+/* Container styling for the Orders Page */
+.orders-page {
+    max-width: 1300px;
+    padding: 1rem;
+    background-image: url('warehouse.webp');
+    font-family: 'Arial', sans-serif;
+    text-align: center; 
+    margin-top: 4.5rem; 
+}
+
+/* Page title styling */
+.orders-page h1 {
+    font-size: 2.5rem;
+    color: black;
+    margin-bottom: 2rem;
+    position: relative;
+    display: inline-block; 
+    background-color: white; 
+    border-radius: 5px; 
+    padding: 0.5rem 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+}
+
+/* Grid layout for order cards */
+.order-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.order-card:hover {
+    transform: translateY(-5px); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
+/* Individual order card styling */
+.order-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: transform 0.8s; 
+}
+
+/* Order card headings */
+.order-card h2 {
+    font-size: 1.5rem;
+    color: #4CAF50;
+    margin-bottom: 1rem;
+}
+
+/* Order card details */
+.order-card p {
+    font-size: 1rem;
+    color: #555;
+    margin: 0.5rem 0;
+}
+
+/* Ordered items list */
+.order-card h3 {
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.order-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0;
+}
+
+.order-card ul li {
+    background-color: #f1f1f1;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    border-radius: 5px;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+/* Loading and error messages */
+.orders-page p {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #666;
+    margin-top: 2rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .orders-page h1 {
+        font-size: 2rem;
+    }
+
+    .order-card h2 {
+        font-size: 1.3rem;
+    }
+
+    .order-card p, 
+    .order-card ul li {
+        font-size: 0.9rem;
+    }
+}

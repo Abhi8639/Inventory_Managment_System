@@ -1,0 +1,158 @@
+/* General styling for the Warehouse Stock Page */
+.warehouse-stock {
+    max-width: 500px;
+    margin: 6rem auto 2rem auto;
+    padding: 1.5rem;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+}
+
+/* Page title */
+.warehouse-stock h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+/* Section headings */
+.warehouse-stock h3,
+.warehouse-stock h4 {
+    font-size: 1.5rem;
+    color: black;
+    margin-bottom: 1rem;
+}
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+table th,
+table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 1rem;
+    color: #555;
+}
+
+table th {
+    background-color: black;
+    color: white;
+    font-weight: bold;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Update section styling */
+.update-section {
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.update-section label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: #555;
+}
+
+.update-section select,
+.update-section input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.update-section select:focus,
+.update-section input:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+/* Update button */
+.update-section button {
+    background-color: black;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    text-transform: uppercase;
+}
+
+.update-section button:hover {
+    background-color: #45a049;
+}
+
+/* Success and error messages */
+.success-message,
+.error-message {
+    font-size: 1rem;
+    margin-top: 1rem;
+    padding: 0.75rem;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.success-message {
+    background-color: #e8f5e9; 
+    color: #2e7d32; 
+    border: 1px solid #2e7d32;
+}
+
+.error-message {
+    background-color: #ffebee; 
+    color: #c62828; 
+    border: 1px solid #c62828;
+}
+
+/* No products message */
+.warehouse-stock p {
+    font-size: 1rem;
+    color: #555;
+    text-align: center;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .warehouse-stock {
+        padding: 1rem;
+    }
+
+    .warehouse-stock h2 {
+        font-size: 1.5rem;
+    }
+
+    table th,
+    table td {
+        font-size: 0.9rem;
+        padding: 0.5rem;
+    }
+
+    .update-section button {
+        font-size: 0.9rem;
+    }
+}

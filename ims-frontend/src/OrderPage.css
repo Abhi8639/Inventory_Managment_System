@@ -1,0 +1,184 @@
+/* General container styling */
+.order-page-container {
+    max-width: 500px;
+    margin: 6rem auto 2rem auto;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+    text-align: center; 
+}
+
+/* Page title styling */
+.order-page-title {
+    text-align: center;
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.order-page-title::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -12px;
+    right: -12px;
+    bottom: 0;
+    background-color: white; 
+    z-index: -1;
+    border-radius: 5px; 
+}
+
+/* Form styling */
+.order-page-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: left; 
+}
+
+/* Input group */
+.order-page-form div {
+    display: flex;
+    flex-direction: column;
+    text-align: left; 
+}
+
+/* Input fields */
+.order-page-input {
+    width: 97%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.order-page-input:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+/* Labels */
+.order-page-form label {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 0.5rem;
+}
+
+/* Order items section */
+.order-items-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.order-items-section select {
+    flex: 1;
+}
+
+/* Error message */
+.error-message {
+    color: #f44336; 
+    font-size: 0.9rem;
+}
+
+/* Price display */
+.price-display {
+    font-size: 1rem;
+    color: #333;
+}
+
+/* Buttons */
+.order-page-button,
+.add-product-button,
+.remove-button {
+    background-color: black;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.order-page-button:hover,
+.add-product-button:hover,
+.remove-button:hover {
+    background-color: #45a049;
+}
+
+/* Remove button specific styles */
+.remove-button {
+    background-color: #f44336;
+}
+
+.remove-button:hover {
+    background-color: #e53935;
+}
+
+/* Add another product button */
+.add-product-button {
+    display: block;
+    margin: 1rem auto;
+}
+
+/* Submit button */
+.order-page-button {
+    display: block;
+    width: 100%;
+}
+
+/* Zipcode suggestions dropdown */
+.zip-suggestions {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    max-height: 150px;
+    overflow-y: auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.zip-suggestion-item {
+    padding: 0.5rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.zip-suggestion-item:hover {
+    background-color: #f1f1f1;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .order-page-container {
+        padding: 1rem;
+    }
+
+    .order-page-title {
+        font-size: 1.5rem;
+    }
+
+    .order-items-section {
+        flex-direction: column;
+    }
+
+    .order-page-button,
+    .add-product-button {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+    }
+}

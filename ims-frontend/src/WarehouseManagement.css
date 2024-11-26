@@ -1,0 +1,169 @@
+/* General container styling */
+.warehouse-management {
+    max-width: 500px;
+    margin: 6rem auto 2rem auto;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+}
+
+/* Page title */
+.warehouse-management h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 2rem;
+}
+
+/* Form section */
+.warehouse-management h2 {
+    text-align: center;
+
+    font-size: 2.0rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+/* Submit button */
+.submit-btn {
+    display: block;
+    background-color: #4CAF50;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #45a049;
+}
+
+/* Table styling */
+.warehouse-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.warehouse-table th,
+.warehouse-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 1rem;
+}
+
+.warehouse-table th {
+    background-color: black;
+    color: white;
+    font-weight: bold;
+}
+
+.warehouse-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.warehouse-table td.actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+/* Button styling */
+.button-container {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.edit-btn, .delete-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.edit-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #45a049;
+}
+
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #e53935;
+}
+
+/* No warehouses message */
+.warehouse-table tbody tr td[colspan="4"] {
+    text-align: center;
+    color: #888;
+    font-size: 1rem;
+    padding: 2rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .warehouse-management {
+        padding: 1.5rem;
+    }
+
+    .warehouse-management h1 {
+        font-size: 2rem;
+    }
+
+    .warehouse-table th, 
+    .warehouse-table td {
+        font-size: 0.9rem;
+        padding: 0.75rem;
+    }
+
+    .submit-btn {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+    }
+}

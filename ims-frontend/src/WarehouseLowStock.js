@@ -3,32 +3,50 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './WarehouseStockPage.css';
 
+/**
+ * WarehouseLowStock component displays a list of products with low stock
+ * in the logged-in user's warehouse.
+ */
 function WarehouseLowStock() {
+  // State to hold low stock products
   const [lowStockProducts, setLowStockProducts] = useState([]);
+  
+  // State to manage error messages
   const [errorMessage, setErrorMessage] = useState('');
   
+  // React Router's navigation hook
   const navigate = useNavigate();
+  
+  // Retrieves warehouse ID from localStorage
   const warehouseId = localStorage.getItem('warehouseId'); 
 
+  /**
+   * useEffect hook to fetch low stock products when the component mounts.
+   * If no warehouse ID is found, navigates the user to the login page.
+   */
   useEffect(() => {
     if (warehouseId) {
-      fetchLowStockProducts();
+      fetchLowStockProducts(); // Fetches low stock products
     } else {
       console.error("Warehouse ID not found in localStorage.");
       setErrorMessage("Warehouse ID not available. Please log in again.");
-      navigate('/login'); 
+      navigate('/login'); // Redirects to login page
     }
   }, [warehouseId, navigate]);
 
+  /**
+   * Fetches products with low stock for the current warehouse.
+   * Filters products with quantities less than 10.
+   */
   const fetchLowStockProducts = async () => {
     try {
       console.log(`Fetching products with low stock for warehouse ID: ${warehouseId}`);
-      const response = await axios.get(`/api/stock/warehouse/${warehouseId}`);
+      const response = await axios.get(`http://localhost:8080/api/stock/warehouse/${warehouseId}`);
       
       if (response.data && Array.isArray(response.data)) {
-        const lowStock = response.data.filter((product) => product.quantity < 10);
-        setLowStockProducts(lowStock);
-        setErrorMessage('');
+        const lowStock = response.data.filter((product) => product.quantity < 10); // Filters low stock products
+        setLowStockProducts(lowStock); // Updates state with low stock products
+        setErrorMessage(''); // Clears any previous error messages
       } else {
         console.error("Unexpected response format:", response);
         setErrorMessage("Failed to retrieve products. Please try again later.");
@@ -38,6 +56,7 @@ function WarehouseLowStock() {
       setErrorMessage("Error fetching products. Please check the server connection.");
     }
   };
+
 
   return (
     <div className="warehouse-stock">

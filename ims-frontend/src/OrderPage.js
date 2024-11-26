@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './OrderPage.css';
 
+/**
+ * OrderPage component allows users to place an order by entering customer information 
+ * and selecting products with quantities. It integrates with backend APIs for data.
+ */
 function OrderPage() {
+  // State to manage customer information
   const [customerInfo, setCustomerInfo] = useState({
     email: '',
     mobileNo: '',
@@ -10,17 +15,28 @@ function OrderPage() {
     zipcode: '',
   });
 
+  // State to handle zip code suggestions for user input
   const [zipSuggestions, setZipSuggestions] = useState([]);
-  const [orderItems, setOrderItems] = useState([{ productId: '', productName: '', price: 0, quantity: 1, error: '' }]);
+
+  // State to manage order items added by the user
+  const [orderItems, setOrderItems] = useState([
+    { productId: '', productName: '', price: 0, quantity: 1, error: '' }
+  ]);
+
+  // State to store the list of available products fetched from the backend
   const [products, setProducts] = useState([]);
 
+  // Effect to fetch products from the backend on component mount
   useEffect(() => {
     fetchProducts();
   }, []);
 
+  /**
+   * Fetches the list of products from the backend.
+   */
   const fetchProducts = () => {
     axios
-      .get('/api/products')
+      .get('http://localhost:8080/api/products')
       .then(response => {
         console.log('Products fetched:', response.data);
         setProducts(response.data);
@@ -28,6 +44,10 @@ function OrderPage() {
       .catch(error => console.error('Error fetching products:', error));
   };
 
+  /**
+   * Handles changes in customer information fields.
+   * Fetches zip code suggestions when the user types a zip code.
+   */
   const handleCustomerInfoChange = (e) => {
     const { name, value } = e.target;
     setCustomerInfo({ ...customerInfo, [name]: value });
@@ -37,9 +57,12 @@ function OrderPage() {
     }
   };
 
+  /**
+   * Fetches zip code suggestions from the backend based on user input.
+   */
   const fetchZipSuggestions = (input) => {
     axios
-      .get(`/api/places?input=${input}`)
+      .get(`http://localhost:8080/api/places?input=${input}`)
       .then(response => {
         const { predictions, status } = response.data;
 
@@ -59,19 +82,25 @@ function OrderPage() {
       });
   };
 
+  /**
+   * Handles selection of a zip code suggestion.
+   */
   const handleZipSelect = (suggestion) => {
     const zipcodeMatch = suggestion.text.match(/\b\d{5}(-\d{4})?\b/); 
 
     if (zipcodeMatch) {
-      const zipcode = zipcodeMatch[0]; 
-      setCustomerInfo({ ...customerInfo, zipcode }); 
+      const zipcode = zipcodeMatch[0]; // Extract valid zip code
+      setCustomerInfo((prevInfo) => ({ ...prevInfo, zipcode })); // Update the zip code field
     } else {
       console.error('No valid zipcode found in the selected suggestion');
     }
 
-    setZipSuggestions([]); 
+    setZipSuggestions([]); // Clears suggestions after selection
   };
 
+  /**
+   * Handles changes in order item fields such as product selection and quantity.
+   */
   const handleOrderItemChange = (index, field, value) => {
     const updatedItems = [...orderItems];
 
@@ -109,22 +138,35 @@ function OrderPage() {
     setOrderItems(updatedItems);
   };
 
+  /**
+   * Adds a new product row to the order items.
+   */
   const addProductRow = () => {
     setOrderItems([...orderItems, { productId: '', productName: '', price: 0, quantity: 1, error: '' }]);
   };
 
+  /**
+   * Removes a product row from the order items.
+   */
   const removeProductRow = (index) => {
     const updatedItems = orderItems.filter((_, i) => i !== index);
     setOrderItems(updatedItems);
   };
 
+  /**
+   * Calculates the total price for an individual order item.
+   */
   const calculateTotalPrice = (item) => {
     return (item.price * item.quantity).toFixed(2);
   };
 
+  /**
+   * Handles form submission to place an order.
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Validates order items for errors or missing data
     const invalidItems = orderItems.filter(item => !item.productId || item.error);
     if (invalidItems.length > 0) {
       alert('Please resolve errors in order items.');
@@ -134,12 +176,13 @@ function OrderPage() {
     const orderData = { ...customerInfo, orderItems };
     console.log('Order Data:', orderData);
 
+    // Submit the order to the backend
     axios
-      .post('/api/orders', orderData)
+      .post('http://localhost:8080/api/orders', orderData)
       .then(response => {
         console.log('Order placed successfully:', response.data);
-        setCustomerInfo({ email: '', mobileNo: '', address: '', zipcode: '' });
-        setOrderItems([{ productId: '', productName: '', price: 0, quantity: 1, error: '' }]);
+        setCustomerInfo({ email: '', mobileNo: '', address: '', zipcode: '' }); // Reset form
+        setOrderItems([{ productId: '', productName: '', price: 0, quantity: 1, error: '' }]); // Reset items
       })
       .catch(error => console.error('Error placing order:', error));
   };
@@ -196,7 +239,10 @@ function OrderPage() {
               {zipSuggestions.map(suggestion => (
                 <li
                   key={suggestion.id}
-                  onClick={() => handleZipSelect(suggestion)}
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent input field onChange from firing
+                    handleZipSelect(suggestion);
+                  }}
                   className="zip-suggestion-item"
                 >
                   {suggestion.text}

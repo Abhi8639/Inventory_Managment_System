@@ -36,18 +36,3 @@
     transform: rotate(360deg);
   }
 }
-.navbar-spacer {
-  height: 60px; 
-}
-
-@media (max-width: 768px) {
-  .navbar-spacer {
-    height: 70px;
-  }
-}
-
-@media (max-width: 480px) {
-  .navbar-spacer {
-    height: 80px;
-  }
-}

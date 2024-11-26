@@ -3,33 +3,52 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './WarehouseStockPage.css';
 
+/**
+ * StockDeductions component displays the list of stock deductions for a specific warehouse.
+ */
 const StockDeductions = () => {
+  // State for storing stock deductions data
   const [deductions, setDeductions] = useState([]);
+  
+  // State for handling error messages
   const [errorMessage, setErrorMessage] = useState('');
+  
+  // React Router's navigation hook
   const navigate = useNavigate();
+  
+  // Retrieves warehouse ID from localStorage
   const warehouseId = localStorage.getItem('warehouseId');
 
+  /**
+   * useEffect hook to fetch stock deductions when the component mounts.
+   * If no warehouse ID is found, navigates the user to the login page.
+   */
   useEffect(() => {
     if (warehouseId) {
-      fetchDeductions();
+      fetchDeductions(); // Fetches stock deductions
     } else {
       console.error("Warehouse ID not found in localStorage.");
       setErrorMessage("Warehouse ID not available. Please log in again.");
-      navigate('/login');
+      navigate('/login'); // Redirects to login page
     }
   }, [warehouseId, navigate]);
 
+  /**
+   * Fetches stock deductions data from the backend.
+   * Updates the `deductions` state or sets an error message if the request fails.
+   */
   const fetchDeductions = async () => {
     try {
-      const response = await axios.get(`/api/stock-deductions/warehouse/${warehouseId}`);
-      setDeductions(response.data);
-      setErrorMessage('');
+      const response = await axios.get(`http://localhost:8080/api/stock-deductions/warehouse/${warehouseId}`);
+      setDeductions(response.data); // Updates state with fetched data
+      setErrorMessage(''); // Clears any previous errors
     } catch (error) {
       console.error("Error fetching stock deductions:", error);
       setErrorMessage("Error fetching stock deductions. Please check the server connection.");
     }
   };
 
+  // Renders the component
   return (
     <div className="warehouse-stock">
       <h2>Stock Deductions</h2>

@@ -1,0 +1,87 @@
+/* General container styling */
+.warehouse-stock {
+    max-width: 900px;
+    margin: 6rem auto 2rem auto;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+}
+
+/* Page title */
+.warehouse-stock h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+table th,
+table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 1rem;
+    color: #555;
+}
+
+table th {
+    background-color: #4CAF50; 
+    color: white;
+    font-weight: bold;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+table tbody tr:last-child td {
+    border-bottom: none; 
+}
+
+/* Messages */
+.error-message {
+    font-size: 1rem;
+    color: #c62828; 
+    background-color: #ffebee; 
+    padding: 0.75rem;
+    border: 1px solid #c62828;
+    border-radius: 5px;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.warehouse-stock p {
+    font-size: 1rem;
+    color: #555;
+    text-align: center;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .warehouse-stock {
+        padding: 1.5rem;
+    }
+
+    table th,
+    table td {
+        font-size: 0.9rem;
+        padding: 0.75rem;
+    }
+
+    .warehouse-stock h2 {
+        font-size: 1.5rem;
+    }
+}

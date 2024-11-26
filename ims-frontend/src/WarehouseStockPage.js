@@ -3,35 +3,48 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './WarehouseStockPage.css';
 
-
+/**
+ * WarehouseStockPage component manages the stock levels of products in a specific warehouse.
+ */
 function WarehouseStockPage() {
+  // State variables for managing products, form inputs, and messages
   const [products, setProducts] = useState([]);
   const [selectedProductId, setSelectedProductId] = useState('');
   const [newQuantity, setNewQuantity] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  
-  const navigate = useNavigate();
-  const warehouseId = localStorage.getItem('warehouseId'); 
 
+  // Uses React Router's navigate function for redirection
+  const navigate = useNavigate();
+  
+  // Fetches the warehouse ID from local storage
+  const warehouseId = localStorage.getItem('warehouseId');
+
+  /**
+   * Effect hook to fetch products when the component is mounted.
+   * Redirects to the login page if the warehouse ID is missing.
+   */
   useEffect(() => {
     if (warehouseId) {
-      fetchProducts();
+      fetchProducts(); // Fetches products for the warehouse
     } else {
       console.error("Warehouse ID not found in localStorage.");
       setErrorMessage("Warehouse ID not available. Please log in again.");
-      navigate('/login'); 
+      navigate('/login'); // Redirects to login page
     }
   }, [warehouseId, navigate]);
 
+  /**
+   * Fetches products for the current warehouse from the backend.
+   */
   const fetchProducts = async () => {
     try {
       console.log(`Fetching products for warehouse ID: ${warehouseId}`);
-      const response = await axios.get(`/api/stock/warehouse/${warehouseId}`);
+      const response = await axios.get(`http://localhost:8080/api/stock/warehouse/${warehouseId}`);
       
       if (response.data && Array.isArray(response.data)) {
-        setProducts(response.data);
-        setErrorMessage('');
+        setProducts(response.data); // Updates product list
+        setErrorMessage(''); // Clears any previous error messages
       } else {
         console.error("Unexpected response format:", response);
         setErrorMessage("Failed to retrieve products. Please try again later.");
@@ -42,24 +55,28 @@ function WarehouseStockPage() {
     }
   };
 
+  /**
+   * Updates the stock quantity for a selected product.
+   */
   const updateStockQuantity = async () => {
     try {
-      const response = await axios.put(`/api/stock/update`, {
+      const response = await axios.put(`http://localhost:8080/api/stock/update`, {
         productId: selectedProductId,
         warehouseId: warehouseId,
         quantity: newQuantity,
       }); 
       if (response.status === 200) {
-        setSuccessMessage('Stock updated successfully!');
-        setNewQuantity('');
-        setSelectedProductId('');
-        fetchProducts(); 
+        setSuccessMessage('Stock updated successfully!'); // Shows success message
+        setNewQuantity(''); // Clears the input field
+        setSelectedProductId(''); // Resets the dropdown
+        fetchProducts(); // Refreshes the product list
       }
     } catch (error) {
       console.error("Error updating stock:", error);
-      setErrorMessage("Failed to update stock. Please try again.");
+      setErrorMessage("Failed to update stock. Please try again."); // Shows error message
     }
   };
+
 
   return (
     <div className="warehouse-stock">

@@ -1,16 +1,7 @@
 package com.Inventory.Management.System.service;
 
-import com.Inventory.Management.System.model.Order;
-
-
-import com.Inventory.Management.System.model.OrderItem;
-import com.Inventory.Management.System.model.Stock;
-import com.Inventory.Management.System.model.Warehouse;
-import com.Inventory.Management.System.model.WarehouseStockDeduction;
-import com.Inventory.Management.System.repository.OrderRepository;
-import com.Inventory.Management.System.repository.WarehouseRepository;
-import com.Inventory.Management.System.repository.WarehouseStockDeductionRepository;
-import com.Inventory.Management.System.repository.OrderItemRepository;
+import com.Inventory.Management.System.model.*;
+import com.Inventory.Management.System.repository.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,6 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * OrderService provides functionality for managing orders, including order creation,
+ * processing, and ensuring inventory updates in warehouses.
+ */
 @Service
 public class OrderService {
 
@@ -27,6 +22,7 @@ public class OrderService {
 
     @Autowired
     private OrderItemRepository orderItemRepository;
+
     @Autowired
     private StockService stockService;
 
@@ -35,10 +31,18 @@ public class OrderService {
 
     @Autowired
     private LocationService locationService;
-    
+
     @Autowired
     private WarehouseStockDeductionRepository warehouseStockDeductionRepository;
-    
+
+    /**
+     * Creates a new order, saves it to the database, and processes it by allocating stock from warehouses.
+     *
+     * @param order The order to be created.
+     * @return The saved order.
+     * @throws IllegalArgumentException If the order or its items are null or empty.
+     * @throws RuntimeException         If an error occurs during order saving or processing.
+     */
     @Transactional
     public Order createOrder(Order order) {
         try {
@@ -48,9 +52,11 @@ public class OrderService {
 
             System.out.println("Saving Order: " + order);
 
+            // Saves the order to the database.
             Order savedOrder = orderRepository.save(order);
             System.out.println("Order saved with ID: " + savedOrder.getOrderId());
 
+            // Saves each order item to the database and associate it with the saved order.
             for (OrderItem item : order.getOrderItems()) {
                 if (item.getProductId() == null) {
                     throw new IllegalArgumentException("Invalid product in order item.");
@@ -60,6 +66,8 @@ public class OrderService {
 
                 orderItemRepository.save(item);
             }
+
+            // Processes the order to allocate stock from warehouses.
             processOrder(savedOrder);
             return savedOrder;
 
@@ -68,13 +76,27 @@ public class OrderService {
             throw new RuntimeException("Error saving the order", e);
         }
     }
+
+    /**
+     * Retrieves all orders from the database.
+     *
+     * @return A list of all orders.
+     */
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
+
+    /**
+     * Processes an order by allocating stock from warehouses based on proximity and availability.
+     *
+     * @param order The order to be processed.
+     * @throws RuntimeException If there is insufficient stock to fulfill the order.
+     */
     @Transactional
     public void processOrder(Order order) {
         String orderZipcode = order.getZipcode();
 
+        // Retrieves all warehouses and sort them by proximity to the order's location.
         List<Warehouse> allWarehouses = warehouseRepository.findAll();
         List<Warehouse> sortedWarehouses = locationService.getWarehousesByProximity(orderZipcode, allWarehouses);
 
@@ -85,13 +107,16 @@ public class OrderService {
             for (Warehouse warehouse : sortedWarehouses) {
                 if (requiredQuantity <= 0) break;
 
+                // Fetches the stock of the product in the current warehouse.
                 Stock stock = stockService.getStock(productId, warehouse.getWarehouseId());
 
                 if (stock != null && stock.getQuantity() > 0) {
                     int allocatedQuantity = Math.min(stock.getQuantity(), requiredQuantity);
 
+                    // Updates the stock quantity in the warehouse.
                     stockService.updateStockQuantity(productId, warehouse.getWarehouseId(), stock.getQuantity() - allocatedQuantity);
-                    
+
+                    // Records the stock deduction for audit purposes.
                     WarehouseStockDeduction deduction = new WarehouseStockDeduction();
                     deduction.setOrderId(order.getOrderId());
                     deduction.setProductId(productId);
@@ -105,6 +130,7 @@ public class OrderService {
                 }
             }
 
+            // If the required quantity cannot be fulfilled, throw an exception.
             if (requiredQuantity > 0) {
                 throw new RuntimeException("Insufficient stock to fulfill order for product ID: " + productId);
             }
