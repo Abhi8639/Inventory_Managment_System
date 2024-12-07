@@ -2,12 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './OrderPage.css';
 
-/**
- * OrderPage component allows users to place an order by entering customer information 
- * and selecting products with quantities. It integrates with backend APIs for data.
- */
 function OrderPage() {
-  // State to manage customer information
   const [customerInfo, setCustomerInfo] = useState({
     email: '',
     mobileNo: '',
@@ -15,39 +10,26 @@ function OrderPage() {
     zipcode: '',
   });
 
-  // State to handle zip code suggestions for user input
   const [zipSuggestions, setZipSuggestions] = useState([]);
-
-  // State to manage order items added by the user
   const [orderItems, setOrderItems] = useState([
     { productId: '', productName: '', price: 0, quantity: 1, error: '' }
   ]);
-
-  // State to store the list of available products fetched from the backend
   const [products, setProducts] = useState([]);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
-  // Effect to fetch products from the backend on component mount
   useEffect(() => {
     fetchProducts();
   }, []);
 
-  /**
-   * Fetches the list of products from the backend.
-   */
   const fetchProducts = () => {
     axios
       .get('http://localhost:8080/api/products')
       .then(response => {
-        console.log('Products fetched:', response.data);
         setProducts(response.data);
       })
       .catch(error => console.error('Error fetching products:', error));
   };
 
-  /**
-   * Handles changes in customer information fields.
-   * Fetches zip code suggestions when the user types a zip code.
-   */
   const handleCustomerInfoChange = (e) => {
     const { name, value } = e.target;
     setCustomerInfo({ ...customerInfo, [name]: value });
@@ -57,9 +39,6 @@ function OrderPage() {
     }
   };
 
-  /**
-   * Fetches zip code suggestions from the backend based on user input.
-   */
   const fetchZipSuggestions = (input) => {
     axios
       .get(`http://localhost:8080/api/places?input=${input}`)
@@ -82,25 +61,17 @@ function OrderPage() {
       });
   };
 
-  /**
-   * Handles selection of a zip code suggestion.
-   */
   const handleZipSelect = (suggestion) => {
     const zipcodeMatch = suggestion.text.match(/\b\d{5}(-\d{4})?\b/); 
 
     if (zipcodeMatch) {
-      const zipcode = zipcodeMatch[0]; // Extract valid zip code
-      setCustomerInfo((prevInfo) => ({ ...prevInfo, zipcode })); // Update the zip code field
-    } else {
-      console.error('No valid zipcode found in the selected suggestion');
+      const zipcode = zipcodeMatch[0];
+      setCustomerInfo((prevInfo) => ({ ...prevInfo, zipcode }));
     }
 
-    setZipSuggestions([]); // Clears suggestions after selection
+    setZipSuggestions([]);
   };
 
-  /**
-   * Handles changes in order item fields such as product selection and quantity.
-   */
   const handleOrderItemChange = (index, field, value) => {
     const updatedItems = [...orderItems];
 
@@ -138,35 +109,22 @@ function OrderPage() {
     setOrderItems(updatedItems);
   };
 
-  /**
-   * Adds a new product row to the order items.
-   */
   const addProductRow = () => {
     setOrderItems([...orderItems, { productId: '', productName: '', price: 0, quantity: 1, error: '' }]);
   };
 
-  /**
-   * Removes a product row from the order items.
-   */
   const removeProductRow = (index) => {
     const updatedItems = orderItems.filter((_, i) => i !== index);
     setOrderItems(updatedItems);
   };
 
-  /**
-   * Calculates the total price for an individual order item.
-   */
   const calculateTotalPrice = (item) => {
     return (item.price * item.quantity).toFixed(2);
   };
 
-  /**
-   * Handles form submission to place an order.
-   */
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validates order items for errors or missing data
     const invalidItems = orderItems.filter(item => !item.productId || item.error);
     if (invalidItems.length > 0) {
       alert('Please resolve errors in order items.');
@@ -174,17 +132,19 @@ function OrderPage() {
     }
 
     const orderData = { ...customerInfo, orderItems };
-    console.log('Order Data:', orderData);
 
-    // Submit the order to the backend
     axios
       .post('http://localhost:8080/api/orders', orderData)
-      .then(response => {
-        console.log('Order placed successfully:', response.data);
-        setCustomerInfo({ email: '', mobileNo: '', address: '', zipcode: '' }); // Reset form
-        setOrderItems([{ productId: '', productName: '', price: 0, quantity: 1, error: '' }]); // Reset items
+      .then(() => {
+        setCustomerInfo({ email: '', mobileNo: '', address: '', zipcode: '' });
+        setOrderItems([{ productId: '', productName: '', price: 0, quantity: 1, error: '' }]);
+        setShowSuccessPopup(true); // Show success popup
       })
       .catch(error => console.error('Error placing order:', error));
+  };
+
+  const closePopup = () => {
+    setShowSuccessPopup(false); // Close the popup
   };
 
   return (
@@ -240,7 +200,7 @@ function OrderPage() {
                 <li
                   key={suggestion.id}
                   onClick={(e) => {
-                    e.stopPropagation(); // Prevent input field onChange from firing
+                    e.stopPropagation();
                     handleZipSelect(suggestion);
                   }}
                   className="zip-suggestion-item"
@@ -314,6 +274,15 @@ function OrderPage() {
           </button>
         </div>
       </form>
+
+      {showSuccessPopup && (
+        <div className="success-popup">
+          <div className="popup-content">
+            <p>Order successfully submitted!</p>
+            <button onClick={closePopup} className="close-popup-button">Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
