@@ -1,14 +1,6 @@
 # Inventory Management System with Multi Warehouse Support
 
-## Team Members
-| Name                     | Role                                      | Matriculation Number |
-|--------------------------|-------------------------------------------|----------------------|
-| **Abhishek Kodati**      | Team Lead, Backend Developer             | 40710053            |
-| **Yeshwa Sri Bokka**     | Backend Developer and Database Specialist| 40688794            |
-| **Nazeema Sayyed**       | Frontend Developer and Documentation Lead| 40691557            |
-| **Sree Keerthi Yalakarajula** | Frontend Developer and Version Control Manager | 40689131 |
 
----
 
 ## Prerequisites
 
